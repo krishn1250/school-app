@@ -10,10 +10,6 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 
-# -------------------------------
-# STUDENT CRUD
-# -------------------------------
-
 
 def create_student(db: Session, data: schemas.StudentCreate):
     class_obj = get_class_by_id(db, data.class_id)
@@ -99,11 +95,6 @@ def get_student_count_by_class_id(db: Session, class_id: int) -> int:
     )
 
 
-# -------------------------------
-# CLASS CRUD
-# -------------------------------
-
-
 def create_class(db: Session, data: schemas.ClassCreate):
     class_obj = models.Class(
         grade=data.grade,
@@ -111,7 +102,6 @@ def create_class(db: Session, data: schemas.ClassCreate):
         school_name=data.school_name,
         no_of_students=0,
     )
-
     db.add(class_obj)
     db.commit()
     db.refresh(class_obj)
@@ -148,7 +138,6 @@ def delete_class(db: Session, class_id: int):
     return {"detail": "Class deleted successfully"}
 
 
-## TRENDING SCORE CRUD
 def insert_top_score(db: Session, min_score: int):
     if not 70 < min_score <= 100:
         return
