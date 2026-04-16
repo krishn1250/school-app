@@ -10,16 +10,13 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 
-
-
-
 class Student(Base):
-    __tablename__="students"
+    __tablename__ = "students"
 
-    id=Column(Integer,primary_key=True,index=True)
-    student_name=Column(String,nullable=False)
-    student_rollno=Column(String,nullable=False,unique=True)
-    student_score=Column(Float,nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    student_name = Column(String, nullable=False)
+    student_rollno = Column(String, nullable=False, unique=True)
+    student_score = Column(Float, nullable=False)
 
     class_id = Column(Integer, ForeignKey("class.id"), nullable=False)
 
@@ -27,7 +24,7 @@ class Student(Base):
 
 
 class Class(Base):
-    __tablename__="class"
+    __tablename__ = "class"
 
     id = Column(Integer, primary_key=True, index=True)
     grade = Column(String, nullable=False)
@@ -47,5 +44,3 @@ class TopperStudent(Base):
     grade = Column(String, nullable=False)
     section = Column(String, nullable=False)
     student_score = Column(Float, nullable=False)
-
-

@@ -1,9 +1,13 @@
 from pydantic import BaseModel, ConfigDict
+
+
 class StudentBaseModel(BaseModel):
     student_name: str
     student_rollno: str
     student_score: float
     class_id: int
+
+
 class StudentCreate(StudentBaseModel):
     pass
 
@@ -13,9 +17,11 @@ class StudentUpdate(BaseModel):
     student_score: float
     class_id: int
 
+
 class StudentRead(StudentBaseModel):
     student_rollno: str
     model_config = ConfigDict(from_attributes=True)
+
 
 class ClassBase(BaseModel):
     grade: str

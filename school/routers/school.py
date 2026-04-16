@@ -11,22 +11,20 @@ import schemas
 from school.crud import crud
 from database import get_db
 
-router = APIRouter(
-    prefix="/school",
-    tags=["School CRUD"]
-)
+router = APIRouter(prefix="/school", tags=["School CRUD"])
 # router=APIRouter(
 #     prefix="/school",
 #     tags=["class CRUD"]
 # )
 
 
-
 @router.post("/students/", response_model=schemas.StudentRead)
 def create_student(student: schemas.StudentCreate, db: Session = Depends(get_db)):
     db_student = crud.get_student_by_rollno(db, student.student_rollno)
     if db_student:
-        raise HTTPException(status_code=400, detail="Student with this roll number already exists")
+        raise HTTPException(
+            status_code=400, detail="Student with this roll number already exists"
+        )
     try:
         return crud.create_student(db, student)
     except LookupError as exc:
@@ -47,7 +45,9 @@ def read_all_students(db: Session = Depends(get_db)):
 
 
 @router.put("/students/{rollno}", response_model=schemas.StudentRead)
-def update_student(rollno: str, student: schemas.StudentUpdate, db: Session = Depends(get_db)):
+def update_student(
+    rollno: str, student: schemas.StudentUpdate, db: Session = Depends(get_db)
+):
     try:
         return crud.update_student(db, rollno, student)
     except LookupError as exc:
@@ -60,8 +60,6 @@ def delete_student(rollno: str, db: Session = Depends(get_db)):
         return crud.delete_student(db, rollno)
     except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
-
-
 
 
 @router.post("/classes/", response_model=schemas.ClassOut)
@@ -83,7 +81,9 @@ def read_all_classes(db: Session = Depends(get_db)):
 
 
 @router.put("/classes/{class_id}", response_model=schemas.ClassOut)
-def update_class(class_id: int, class_data: schemas.ClassCreate, db: Session = Depends(get_db)):
+def update_class(
+    class_id: int, class_data: schemas.ClassCreate, db: Session = Depends(get_db)
+):
     try:
         return crud.update_class(db, class_id, class_data)
     except LookupError as exc:

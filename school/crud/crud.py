@@ -9,9 +9,11 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 import models
 import schemas
+
 # -------------------------------
 # STUDENT CRUD
 # -------------------------------
+
 
 def create_student(db: Session, data: schemas.StudentCreate):
     class_obj = get_class_by_id(db, data.class_id)
@@ -29,11 +31,16 @@ def create_student(db: Session, data: schemas.StudentCreate):
     db.refresh(class_obj)
     return student
 
+
 def get_student_by_rollno(db: Session, rollno: str):
-    return db.query(models.Student).filter(models.Student.student_rollno == rollno).first()
+    return (
+        db.query(models.Student).filter(models.Student.student_rollno == rollno).first()
+    )
+
 
 def get_all_students(db: Session):
     return db.query(models.Student).all()
+
 
 def update_student(db: Session, rollno: str, updated_data: schemas.StudentUpdate):
     return _update_student(db, rollno, updated_data)
@@ -66,6 +73,7 @@ def _update_student(db: Session, rollno: str, updated_data):
     db.refresh(student)
     return student
 
+
 def delete_student(db: Session, rollno: str):
     student = get_student_by_rollno(db, rollno)
     if not student:
@@ -90,28 +98,33 @@ def get_student_count_by_class_id(db: Session, class_id: int) -> int:
         .scalar()
     )
 
+
 # -------------------------------
 # CLASS CRUD
 # -------------------------------
+
 
 def create_class(db: Session, data: schemas.ClassCreate):
     class_obj = models.Class(
         grade=data.grade,
         section=data.section,
         school_name=data.school_name,
-        no_of_students=0
+        no_of_students=0,
     )
-    
+
     db.add(class_obj)
     db.commit()
     db.refresh(class_obj)
     return class_obj
 
+
 def get_class_by_id(db: Session, class_id: int):
     return db.query(models.Class).filter(models.Class.id == class_id).first()
 
+
 def get_all_classes(db: Session):
     return db.query(models.Class).all()
+
 
 def update_class(db: Session, class_id: int, updated_data: schemas.ClassCreate):
     class_obj = get_class_by_id(db, class_id)
@@ -122,6 +135,7 @@ def update_class(db: Session, class_id: int, updated_data: schemas.ClassCreate):
     db.commit()
     db.refresh(class_obj)
     return class_obj
+
 
 def delete_class(db: Session, class_id: int):
     class_obj = get_class_by_id(db, class_id)
@@ -134,9 +148,8 @@ def delete_class(db: Session, class_id: int):
     return {"detail": "Class deleted successfully"}
 
 
-
 ## TRENDING SCORE CRUD
-def insert_top_score(db: Session,min_score:int):
+def insert_top_score(db: Session, min_score: int):
     if not 70 < min_score <= 100:
         return
 
@@ -155,7 +168,7 @@ def insert_top_score(db: Session,min_score:int):
                 student_rollno=student.student_rollno,
                 student_score=student.student_score,
                 grade=grade,
-                section=section
+                section=section,
             )
             db.add(topper_data)
 
@@ -164,10 +177,14 @@ def insert_top_score(db: Session,min_score:int):
         db.rollback()
         raise
 
+
 def get_toppers_with_school_name(db: Session):
     results = (
         db.query(models.TopperStudent, models.Class.school_name)
-        .join(models.Student, models.TopperStudent.student_rollno == models.Student.student_rollno)
+        .join(
+            models.Student,
+            models.TopperStudent.student_rollno == models.Student.student_rollno,
+        )
         .join(models.Class, models.Student.class_id == models.Class.id)
         .all()
     )
@@ -179,7 +196,7 @@ def get_toppers_with_school_name(db: Session):
             grade=student.grade,
             section=student.section,
             student_score=student.student_score,
-            school_name=school_name
+            school_name=school_name,
         )
         for student, school_name in results
     ]

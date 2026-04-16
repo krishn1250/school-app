@@ -12,14 +12,13 @@ import schemas
 from school.crud import crud
 from database import get_db
 
-router = APIRouter(
-    prefix="/score",
-    tags=["Student Top Score CRUD"]
-)
+router = APIRouter(prefix="/score", tags=["Student Top Score CRUD"])
 
 
 @router.post("/topscore/", response_model=List[schemas.TopperStudentOut])
-def store_top_score(min_score: int = Query(..., gt=70, le=100), db: Session = Depends(get_db)):
+def store_top_score(
+    min_score: int = Query(..., gt=70, le=100), db: Session = Depends(get_db)
+):
     """
     Store students with score >= min_score into the TopperStudent table,
     then return those entries along with school_name.
