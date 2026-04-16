@@ -13,7 +13,9 @@ DB_PORT = os.getenv("PS_PORT")
 DB_NAME = os.getenv("PS_DB")
 
 if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME]):
-    raise RuntimeError("Missing one or more PostgreSQL environment variables: PS_USERNAME, PS_PASSWORD, PS_URL, PS_PORT, PS_DB")
+    raise RuntimeError(
+        "Missing one or more PostgreSQL environment variables: PS_USERNAME, PS_PASSWORD, PS_URL, PS_PORT, PS_DB"
+    )
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -21,6 +23,7 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
 
 def get_db():
     db = SessionLocal()
