@@ -12,5 +12,11 @@ from school.routers import school, score
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
+
+@app.get("/")
+def root():
+    return {"message": "School CRUD API is running"}
+
+
 app.include_router(school.router)
 app.include_router(score.router)
