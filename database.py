@@ -6,11 +6,11 @@ from pathlib import Path
 import os
 
 load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
-DB_USER = os.getenv("PS_USERNAME")
-DB_PASSWORD = os.getenv("PS_PASSWORD")
-DB_HOST = os.getenv("PS_URL")
-DB_PORT = os.getenv("PS_PORT")
-DB_NAME = os.getenv("PS_DB")
+DB_USER = os.getenv("PS_USERNAME") or os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("PS_PASSWORD") or os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("PS_URL") or os.getenv("DB_HOST")
+DB_PORT = os.getenv("PS_PORT") or os.getenv("DB_PORT")
+DB_NAME = os.getenv("PS_DB") or os.getenv("DB_NAME")
 
 if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME]):
     raise RuntimeError(
